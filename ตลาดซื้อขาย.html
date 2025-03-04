@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตลาดซื้อขายไก่ชน</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --secondary-color: #e67e22;
+            --light-color: #f9ebea;
+            --dark-color: #922b21;
+            --text-color: #333;
+            --border-color: #ddd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f8f8;
+            color: var(--text-color);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .logo i {
+            margin-right: 8px;
+        }
+        
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 20px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            outline: none;
+        }
+        
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .nav-icon.active {
+            color: var(--secondary-color);
+        }
+        
+        /* Sidebar Styles */
+        .main-content {
+            display: flex;
+            margin-top: 20px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            padding-right: 20px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            text-decoration: none;
+            color: var(--text-color);
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 10px;
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        /* Content */
+        .content {
+            flex: 1;
+        }
+        
+        /* Marketplace Styles */
+        .marketplace-filters {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .filter-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .filter-option {
+            padding: 5px 15px;
+            background-color: var(--light-color);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-option:hover, .filter-option.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .price-range {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .price-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+        }
+        
+        .marketplace-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-price {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        
+        .product-title {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .product-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .product-location {
+            font-size: 12px;
+            color: #888;
+            display: flex;
+            align-items: center;
+        }
+        
+        .product-location i {
+            margin-right: 5px;
+            font-size: 14px;
+        }
+        
+        .add-product {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 5px;
+        }
+        
+        .page-item {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .page-item:hover, .page-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Chat Styles */
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+        }
+        
+        .chat-button {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .chat-panel {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chat-panel.active {
+            display: flex;
+        }
+        
+        .chat-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .chat-title {
+            font-weight: bold;
+        }
+        
+        .chat-close {
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+        }
+        
+        .message.received {
+            justify-content: flex-start;
+        }
+        
+        .message.sent {
+            justify-content: flex-end;
+        }
+        
+        .message-content {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        
+        .received .message-content {
+            background-color: #f1f0f0;
+        }
+        
+        .sent .message-content {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .chat-input {
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            outline: none;
+        }
+        
+        .chat-input button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo"><i class="fas fa-drumstick-bite"></i> ไก่ชนเซียน</a>
+            <div class="search-bar">
+                <input type="text" placeholder="ค้นหาในตลาดซื้อขาย...">
+            </div>
+            <div class="nav-icons">
+                <div class="nav-icon" id="chat-icon">
+                    <i class="fas fa-comment"></i>
+                </div>
+                <div class="nav-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="nav-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> หน้าหลัก</a></li>
+                <li><a href="#" class="nav-link active"><i class="fas fa-store"></i> ตลาดซื้อขาย</a></li>
+                <li><a href="index.html" class="nav-link" onclick="redirectToPage('farm-service'); return false;"><i class="fas fa-warehouse"></i> บริการฝาก-เลี้ยง</a></li>
+                <li><a href="index.html" class="nav-link" onclick="redirectToPage('chicken-scan'); return false;"><i class="fas fa-qrcode"></i> สแกนไก่</a></li>
+                <li><a href="index.html" class="nav-link" onclick="redirectToPage('guide'); return false;"><i class="fas fa-book"></i> คู่มือการเลี้ยงไก่</a></li>
+            </ul>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content">
+            <!-- Marketplace Filters -->
+            <div class="marketplace-filters">
+                <div class="filter-title">กรองข้อมูล</div>
+                <div class="filter-section">
+                    <div class="filter-subtitle">ประเภทไก่ชน</div>
+                    <div class="filter-options">
+                        <div class="filter-option active">ทั้งหมด</div>
+                        <div class="filter-option">ไก่เหลือง</div>
+                        <div class="filter-option">ไก่พม่า</div>
+                        <div class="filter-option">ไก่เขียวหางดำ</div>
+                        <div class="filter-option">ไก่ประดู่</div>
+                        <div class="filter-option">อื่นๆ</div>
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <div class="filter-subtitle">ราคา</div>
+                    <div class="price-range">
+                        <input type="number" class="price-input" placeholder="ต่ำสุด">
+                        <span>-</span>
+                        <input type="number" class="price-input" placeholder="สูงสุด">
+                        <button style="background: var(--primary-color); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">กรอง</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Marketplace Grid -->
+            <div class="marketplace-grid">
+                <div class="product-card">
+                    <img class="product-image" src="/api/placeholder/300/200" alt="ไก่ชนเหลืองหางขาว">
+                    <div class="product-info">
+                        <div class="product-price">฿15,000</div>
+                        <div class="product-title">ไก่ชนเหลืองหางขาว</div>
+                        <div class="product-desc">อายุ 1 ปี 2 เดือน ผ่านการชน 3 ครั้ง ชนะ 2 ครั้ง</div>
+                        <div class="product-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            นครปฐม
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <img class="product-image" src="/api/placeholder/300/200" alt="ไก่พม่าดำ">
+                    <div class="product-info">
+                        <div class="product-price">฿22,000</div>
+                        <div class="product-title">ไก่พม่าดำ</div>
+                        <div class="product-desc">อายุ 1 ปี 8 เดือน น้ำหนัก 3.2 kg แข้งเขียว</div>
+                        <div class="product-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ราชบุรี
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <img class="product-image" src="/api/placeholder/300/200" alt="ไก่เหลืองแก่">
+                    <div class="product-info">
+                        <div class="product-price">฿18,500</div>
+                        <div class="product-title">ไก่เหลืองแก่</div>
+                        <div class="product-desc">อายุ 2 ปี ผ่านการชน 5 ครั้ง ชนะ 4 ครั้ง</div>
+                        <div class="product-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            สมุทรปราการ
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <img class="product-image" src="/api/placeholder/300/200" alt="ไก่แข้งเหลือง">
+                    <div class="product-info">
+                        <div class="product-price">฿12,000</div>
+                        <div class="product-title">ไก่แข้งเหลือง</div>
+                        <div class="product-desc">อายุ 1 ปี น้ำหนัก 2.8 kg สายพันธุ์ดี</div>
+                        <div class="product-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            กรุงเทพฯ
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <img class="product-image" src="/api/placeholder/300/200" alt="ไก่เขียวหางดำ">
+                    <div class="product-info">
+                        <div class="product-price">฿20,000</div>
+                        <div class="product-title">ไก่เขียวหางดำ</div>
+                        <div class="product-desc">อายุ 1 ปี 5 เดือน น้ำหนัก 3 kg แข็งแรงมาก</div>
+                        <div class="product-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            เชียงใหม่
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <img class="product-image" src="/api/placeholder/300/200" alt="ไก่ประดู่เหลือง">
+                    <div class="product-info">
+                        <div class="product-price">฿25,000</div>
+                        <div class="product-title">ไก่ประดู่เหลือง</div>
+                        <div class="product-desc">อายุ 2 ปี 3 เดือน ผ่านการชน 7 ครั้ง ชนะ 6 ครั้ง</div>
+                        <div class="product-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            สุพรรณบุรี
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <img class="product-image" src="/api/placeholder/300/200" alt="ไก่แดงหางขาว">
+                    <div class="product-info">
+                        <div class="product-price">฿16,500</div>
+                        <div class="product-title">ไก่แดงหางขาว</div>
+                        <div class="product-desc">อายุ 1 ปี 4 เดือน ตัวผู้ น้ำหนัก 2.9 kg</div>
+                        <div class="product-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ลพบุรี
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <img class="product-image" src="/api/placeholder/300/200" alt="ไก่ตีเก่ง สายแข็ง">
+                    <div class="product-info">
+                        <div class="product-price">฿28,000</div>
+                        <div class="product-title">ไก่ตีเก่ง สายแข็ง</div>
+                        <div class="product-desc">อายุ 3 ปี ผ่านการชน 10 ครั้ง ชนะ 8 ครั้ง</div>
+                        <div class="product-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            อยุธยา
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="page-item active">1</div>
+                <div class="page-item">2</div>
+                <div class="page-item">3</div>
+                <div class="page-item">4</div>
+                <div class="page-item">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Product Button -->
+    <div class="add-product">
+        <i class="fas fa-plus"></i>
+    </div>
+    
+    <!-- Chat Container -->
+    <div class="chat-container">
+        <div class="chat-button" id="chat-button">
+            <i class="fas fa-comment"></i>
+        </div>
+        <div class="chat-panel" id="chat-panel">
+            <div class="chat-header">
+                <div class="chat-title">แชท</div>
+                <div class="chat-close" id="chat-close">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="chat-messages">
+                <div class="message received">
+                    <div class="message-content">
+                        สวัสดีครับ มีอะไรให้ช่วยเหลือไหมครับ?
+                    </div>
+                </div>
+                <div class="message sent">
+                    <div class="message-content">
+                        สนใจไก่ชนเหลืองหางขาวครับ
+                    </div>
+                </div>
+                <div class="message received">
+                    <div class="message-content">
+                        ไก่ตัวไหนครับ ช่วยส่งรูปหรือลิงก์มาให้ดูหน่อยได้ไหมครับ
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="พิมพ์ข้อความ...">
+                <button>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chat functionality
+            const chatButton = document.getElementById('chat-button');
+            const chatPanel = document.getElementById('chat-panel');
+            const chatClose = document.getElementById('chat-close');
+            const chatIcon = document.getElementById('chat-icon');
+            
+            chatButton.addEventListener('click', function() {
+                chatPanel.classList.toggle('active');
+            });
+            
+            chatClose.addEventListener('click', function() {
+                chatPanel.classList.remove('active');
+            });
+            
+            chatIcon.addEventListener('click', function() {
+                chatPanel.classList.toggle('active');
+            });
+            
+            // Filter options
+            const filterOptions = document.querySelectorAll('.filter-option');
+            
+            filterOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const parentGroup = this.parentElement;
+                    parentGroup.querySelectorAll('.filter-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+        });
+        
+        // Function to redirect to specific page in index.html
+        function redirectToPage(pageId) {
+            // Store the pageId in localStorage
+            localStorage.setItem('redirectToPage', pageId);
+            // Navigate to index.html
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
+<!-- ระบบแชท -->
+<script src="/path/to/chat-widget.js"></script>
